@@ -1,20 +1,29 @@
 <template name="mfAdminLayout">
-  {{#AdminLTE
-    skin=AdminLTE_skin
-    fixed=AdminLTE_fixed
-    sidebarMini=AdminLTE_sidebarMini}}
-    {{> mfAdminHeader}}
-    {{> mfAdminSidebar}}
-    <div class="content-wrapper">
-      <div class="content-header">
-        {{> Template.dynamic template=contentHeader}}
-      </div>
-      <div class="content" style="min-height: {{minHeight}}">
-        {{> Template.dynamic template=content data=contentData}}
-      </div>
-    </div>
-  {{/AdminLTE}}
-  {{> mfAdminCollectionsDeleteModal}}
+  {{#if Template.subscriptionsReady}}
+    {{#if isUserAdmin}}
+      {{#AdminLTE
+        skin=AdminLTE_skin
+        fixed=AdminLTE_fixed
+        sidebarMini=AdminLTE_sidebarMini}}
+        {{> mfAdminHeader}}
+        {{> mfAdminSidebar}}
+        <div class="content-wrapper">
+          <div class="content-header">
+            {{> Template.dynamic template=contentHeader}}
+          </div>
+          <div class="content" style="min-height: {{minHeight}}">
+            {{> Template.dynamic template=content data=contentData}}
+          </div>
+        </div>
+      {{/AdminLTE}}
+      {{> mfAdminCollectionsDeleteModal}}
+
+    {{else}}
+      <p>You are not an admin. <a href="{{pathFor 'login'}}">Login Here</a></p>
+    {{/if}}
+  {{else}}
+    <p>loading...</p>
+  {{/if}}
 </template>
 
 <template name="mfAdminContentHeader">

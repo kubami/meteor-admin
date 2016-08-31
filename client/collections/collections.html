@@ -1,20 +1,32 @@
 <template name="mfAdminCollectionsView">
-  {{#if Template.subscriptionsReady}}
-    {{#if hasDocuments}}
-      <div class="box box-default">
-        <div class="box-body">
-          {{> tabular table=table class="table dataTable"}}
+  <div class="box box-default">
+    <div class="box-body">
+      {{#if Template.subscriptionsReady}}
+        {{#if hasDocuments}}
+          {{> tabular table=tabularTable class="table table-striped table-condensed dataTable"}}
+        {{else}}
+          <div class="alert alert-info">
+            <p>There are no visible items in this collection.</p>
+            <a href="{{newPath}}" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> <span>Add one</span></a>
+          </div>
+        {{/if}}
+      {{else}}
+        <div class="overlay">
+          <i class="fa fa-refresh fa-spin"></i>
         </div>
-      </div>
-    {{else}}
-      <div class="alert alert-info">
-        <p>There are no visible items in this collection.</p>
-        <a href="{{newPath}}" class="btn btn-primary"><i class="fa fa-plus"></i> <span>Add one</span></a>
-      </div>
-    {{/if}}
-  {{else}}
-    <span>Loading...</span>
-  {{/if}}
+      {{/if}}
+    </div>
+  </div>
+</template>
+
+<template name="mfAdminCollectionsDetailedView">
+  <div class="box box-default">
+    <div class="box-body">
+      <pre>
+          {{stringifiedDocument}}
+      </pre>
+    </div>
+  </div>
 </template>
 
 <template name="mfAdminCollectionsNew">
@@ -23,7 +35,7 @@
       {{> quickForm
         id="mfAdmin_insert"
         collection=collection
-        type="insert"
+        type="normal"
         buttonContent="Create"
         _successPath=successPath}}
     </div>
@@ -36,29 +48,30 @@
       {{> quickForm
         id="mfAdmin_update"
         collection=collection
-        type="update"
-        doc=doc
+        type="normal"
+        doc=document
         buttonContent="Update"
-        _successPath=successPath}}
+      }}
     </div>
   </div>
 </template>
 
 <template name="mfAdminCollectionsWidgets">
   <div class="row">
-    {{#each Admin.collections.get}}
-      {{#unless widget.hidden}}
+    {{#each collection in Admin.collections.get}}
+      {{#unless collection.widget.hidden}}
         <div class="col-lg-3 col-xs-6">
-          <a href="{{viewPath}}" class="small-box bg-{{background}}">
+          <a href="{{pathFor 'mfAdmin.collections.view' collectionName=collection.name}}"
+             class="small-box bg-{{background}}">
             <div class="inner">
-              <h3>{{getPublishedCount countPubName}}</h3>
-              <p>{{name}}</p>
+              <h3>{{getPublishedCount (getCountPubName collection.name)}}</h3>
+              <p>{{collection.name}}</p>
             </div>
             <div class="icon">
               <i class="fa fa-plus"></i>
             </div>
-            <a href="{{viewPath}}" class="small-box-footer">
-              See all <i class="fa fa-arrow-circle-right"></i>
+            <a href="{{pathFor 'mfAdmin.collections.view' collectionName=collection.name}}" class="small-box-footer">
+              See all <i class="glyphicon glyphicon-arrow-right"></i>
             </a>
           </a>
         </div>
@@ -67,14 +80,24 @@
   </div>
 </template>
 
+
+<template name="mfAdminCollectionsViewDetailsBtn">
+  <a href="{{pathFor 'mfAdmin.collections.viewDocument'
+                     collectionName=collectionName
+                     documentId=documentId}}"
+     class="hidden-xs btn btn-xs btn-primary">{{documentId}}</a>
+</template>
+
 <template name="mfAdminCollectionsEditBtn">
-  <a href="{{path}}" class="hidden-xs btn btn-xs btn-primary"><i class="fa fa-pencil"></i></a>
-  <a href="{{path}}" class="visible-xs btn btn-sm btn-primary"><i class="fa fa-pencil"></i> Edit</a>
+  <a href="{{path}}" class="hidden-xs btn btn-xs btn-primary"><i class="glyphicon glyphicon-pencil"></i></a>
+  <a href="{{path}}" class="visible-xs btn btn-sm btn-primary"><i class="glyphicon glyphicon-pencil"></i> Edit</a>
 </template>
 
 <template name="mfAdminCollectionsDeleteBtn">
-	<a href="#" class="hidden-xs btn btn-xs btn-danger js-delete-doc" data-id="{{_id}}"><i class="fa fa-times"></i></a>
-	<a href="#" class="visible-xs btn btn-sm btn-danger js-delete-doc" data-id="{{_id}}"><i class="fa fa-times"></i> Delete</a>
+  <a href="#" class="hidden-xs btn btn-xs btn-danger js-delete-doc" data-documentId="{{_id}}">
+    <i class="glyphicon glyphicon-trash"></i></a>
+  <a href="#" class="visible-xs btn btn-sm btn-danger js-delete-doc" data-documentId="{{_id}}">
+    <i class="glyphicon glyphicon-trash"></i>Delete</a>
 </template>
 
 <template name="mfAdminCollectionsDeleteModal">

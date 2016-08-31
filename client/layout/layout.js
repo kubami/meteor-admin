@@ -38,5 +38,9 @@ Template.mfAdminLayout.helpers({
     var routeOptions = Admin._currentRouteOptions();
     return routeOptions && routeOptions.data &&
       routeOptions.data(Admin._routeParams());
+  },
+  isUserAdmin: function() {
+    return Admin.isAdmin(Meteor.userId());
+    // return Roles.userIsInRole(Meteor.userId(), 'admin');
   }
 });

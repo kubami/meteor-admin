@@ -1,28 +1,30 @@
 Package.describe({
-  name: 'mfactory:admin',
-  version: '0.0.2',
+  name: 'kubs:admin',
+  version: '0.1.0',
   summary: 'A complete admin dashboard solution',
-  git: 'https://github.com/meteor-factory/meteor-admin.git',
+  git: 'https://github.com/kubami/meteor-admin.git',
   documentation: 'README.md'
 });
 
 Package.onUse(function(api) {
-  api.versionsFrom('1.1.0.2');
+  api.versionsFrom('METEOR@1.3-rc.1');
 
   api.use([
+    'modules',
+    'ecmascript',
+    'check',
     'templating',
     'underscore',
     'tracker',
     'reactive-var',
     'reactive-dict',
-    'mfactory:admin-lte@0.0.1',
-    'aldeed:autoform@5.3.0',
-    'aldeed:tabular@1.2.0',
-    'tmeasday:publish-counts@0.4.0'
+    'mfactory:admin-lte@0.0.2',
+    'aldeed:autoform@5.8.1',
+    'aldeed:tabular@1.6.1',
+    'tmeasday:publish-counts@0.7.0'
   ]);
 
   api.use([
-    'iron:router@1.0.7',
     'kadira:flow-router@2.10.0',
     'kadira:blaze-layout@2.3.0',
     'accounts-ui',
@@ -55,7 +57,6 @@ Package.onUse(function(api) {
     'client/breadcrumb/breadcrumb.js',
     'client/helpers.js',
     'client/defaults.js',
-    'client/autoform.js',
     'client/style.css'
   ], 'client');
 
